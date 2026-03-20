@@ -1,6 +1,24 @@
 % !TEX program = xelatex
+%
 % Beamer Template - University of Perugia Style
 % Compile with XeLaTeX
+%
+% Copyright (c) 2026 Lorenzo Capponi
+% License: MIT License
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in
+% all copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 \documentclass[aspectratio=169]{beamer}
 
@@ -12,6 +30,15 @@
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{amsmath}       % align, gather, multline, etc.
+\usepackage{amssymb}       % \mathbb, \mathcal, extra symbols
+\usepackage{siunitx}       % consistent units: \SI{3e8}{\metre\per\second}, \num{1.23e-4}
+\sisetup{
+    per-mode        = symbol,       % m/s style (use fraction for m over s)
+    uncertainty-mode = separate,    % \SI{1.0 +- 0.1}{\metre}
+    range-phrase    = {--},         % 1--10 keV
+    detect-all,                     % inherit surrounding font (bold titles, etc.)
+}
 
 %% ============================================================
 %% FONTS
@@ -35,9 +62,13 @@
 
 %% ============================================================
 %% COLOR PALETTE
+%% Set RuleColorA and RuleColorB to match your logo.
+%% - One logo color  → use two tones of the same hue.
+%% - Multiple colors → use the two most prominent ones.
 %% ============================================================
-\definecolor{PrimaryBlue}{HTML}{2B4D9A}
-\definecolor{PrimaryRed}{HTML}{E53031}
+\definecolor{RuleColorA}{HTML}{E53031}   % top rule
+\definecolor{RuleColorB}{HTML}{2B4D9A}   % bottom rule
+\definecolor{DarkGrey}{HTML}{555555}
 
 %% ============================================================
 %% BEAMER THEME
@@ -65,37 +96,32 @@
 %% ============================================================
 \setbeamertemplate{frametitle}{%
     \vspace{0.05cm}%
-    \begin{beamercolorbox}[wd=\paperwidth,ht=1.2cm,dp=0.3cm,leftskip=0.5cm]{frametitle}
-        \usebeamerfont{frametitle}\insertframetitle
+    \begin{beamercolorbox}[wd=\paperwidth,ht=1.2cm,dp=0.3cm,leftskip=0.5cm,rightskip=0.5cm]{frametitle}
+        \usebeamerfont{frametitle}\insertframetitle\hfill\raisebox{-0.15cm}{\includegraphics[height=1cm]{logo.png}}
         \ifx\insertframesubtitle\empty\else
             \\[0.1cm]{\small\insertframesubtitle}
         \fi
     \end{beamercolorbox}%
-    % Uncomment for logo in top-right of every content slide:
-    % \begin{tikzpicture}[remember picture,overlay]
-    %     \node[anchor=north east] at ([xshift=-0.5cm,yshift=-0.3cm]current page.north east)
-    %         {\includegraphics[height=1cm]{logo.png}};
-    % \end{tikzpicture}
 }
 
 %% ============================================================
 %% FOOTER  —  red line / white gap / blue line + author | date | n/N
 %% ============================================================
 \setbeamertemplate{footline}{%
-    \vskip0.3cm%
-    \hbox{\hspace{1cm}\textcolor{PrimaryRed} {\rule{\dimexpr\paperwidth-2cm\relax}{1.5pt}}}%
+    \vskip-0.6cm%
+    \hbox{\hspace{1cm}\textcolor{RuleColorA} {\rule{\dimexpr\paperwidth-2cm\relax}{1.5pt}}}%
     \vskip3pt%
-    \hbox{\hspace{1cm}\textcolor{PrimaryBlue}{\rule{\dimexpr\paperwidth-2cm\relax}{1.5pt}}}%
-    \vskip0.2cm%
+    \hbox{\hspace{1cm}\textcolor{RuleColorB}{\rule{\dimexpr\paperwidth-2cm\relax}{1.5pt}}}%
+    \vskip0.08cm%
     \leavevmode%
     \hbox{%
-        \begin{beamercolorbox}[wd=0.33\paperwidth,ht=0.5cm,dp=0.2cm,left,leftskip=1cm]{footline}
+        \begin{beamercolorbox}[wd=0.33\paperwidth,ht=0.3cm,dp=0.1cm,left,leftskip=1cm]{footline}
             \usebeamerfont{footline}\insertshortauthor
         \end{beamercolorbox}%
-        \begin{beamercolorbox}[wd=0.34\paperwidth,ht=0.5cm,dp=0.2cm,center]{footline}
+        \begin{beamercolorbox}[wd=0.34\paperwidth,ht=0.3cm,dp=0.1cm,center]{footline}
             \usebeamerfont{footline}\insertshortdate
         \end{beamercolorbox}%
-        \begin{beamercolorbox}[wd=0.33\paperwidth,ht=0.5cm,dp=0.2cm,right,rightskip=1cm]{footline}
+        \begin{beamercolorbox}[wd=0.33\paperwidth,ht=0.3cm,dp=0.1cm,right,rightskip=1cm]{footline}
             \usebeamerfont{footline}\insertframenumber{} / \inserttotalframenumber
         \end{beamercolorbox}%
     }%
@@ -121,27 +147,23 @@
         % ---- Subtitle ----
         \noindent\hspace{1cm}{\large\insertsubtitle}\par%
         \vspace{0.55cm}%
-        % ---- Red line  (1cm margin both sides) ----
-        \noindent\hspace{1cm}\textcolor{PrimaryRed}{\rule{\dimexpr\paperwidth-2cm\relax}{2pt}}\\%
-        \vspace{0.01cm}%
-        % ---- Blue line ----
-        \noindent\hspace{1cm}\textcolor{PrimaryBlue}{\rule{\dimexpr\paperwidth-2cm\relax}{2pt}}\par%
+        % ---- Red + Blue lines (1cm margin both sides) ----
+        \hbox{\hspace{1cm}\textcolor{RuleColorA}{\rule{\dimexpr\paperwidth-2cm\relax}{2pt}}}%
+        \nointerlineskip\vskip2pt%
+        \hbox{\hspace{1cm}\textcolor{RuleColorB}{\rule{\dimexpr\paperwidth-2cm\relax}{2pt}}}%
         \vspace{0.4cm}%
         % ---- Author (left) + logos (right) ----
         \noindent\hspace{1cm}%
-        \begin{minipage}[t]{0.58\paperwidth}%
-            {\normalsize\insertauthor}\par%
+        \begin{minipage}[c]{0.58\paperwidth}%
+            {\small\textcolor{DarkGrey}{\insertauthor}}\par%
             \vspace{0.1cm}%
-            {\small\insertinstitute}\par%
+            {\footnotesize\textcolor{DarkGrey}{\insertinstitute}}\par%
             \vspace{0.1cm}%
-            {\small\insertdate}%
+            {\footnotesize\textcolor{DarkGrey}{\insertdate}}%
         \end{minipage}%
-        \begin{minipage}[t]{\dimexpr0.42\paperwidth-2cm\relax}%
+        \begin{minipage}[c]{\dimexpr0.42\paperwidth-2cm\relax}%
             \raggedleft
-            % Replace \fbox with \includegraphics when logos are ready:
-            % \includegraphics[height=1.1cm]{logo1.png}\hspace{0.3cm}%
-            % \includegraphics[height=1.1cm]{logo2.png}%
-            \fbox{\parbox[c][1.1cm][c]{3cm}{\centering\tiny logo space}}%
+            \includegraphics[height=1.8cm]{logo.png}%
         \end{minipage}\par%
     \end{minipage}%
 }
